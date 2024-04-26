@@ -46,6 +46,11 @@ save_figures   = True # flag whether to save figures to disk or not
 # ## Main code
 
 # %%
+# Enable the autoreload of modules
+# %load_ext autoreload
+# %autoreload 2
+
+# %%
 # laod packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -58,8 +63,8 @@ import csv
 import sys
 sys.path.append(work_dir)
 
-from src.helper import find_varname_from_unit
-from src.plotting import split_cmap
+from src.helper import *
+from src.plotting import *
 
 # %% [markdown]
 # ### paleogeographic differences
@@ -68,10 +73,12 @@ from src.plotting import split_cmap
 # %%
 exp_list = ['KCM_1200', 'texzx1', 'teuyO']
 exp_labels = ['KCM (Müller/Blakey)', 'HadCM3 (Scotese)', 'HadCM3 (Getech)']
+orog_levels = [0,250,500,750,1000,1250,1500,1750,2000,2250,2500]
 
-# new multi-panel figure
-fig, axes = plt.subplots(1, 3, figsize=(15, 5), subplot_kw={'projection': ccrs.Robinson()})
+# global comparison of paleogeographies
 
+# Load all data first
+data = []
 for idx,exp in enumerate(exp_list):
     # load data
     ds_orog = xr.open_dataset(f"{data_dir}/raw/model_clims/{exp}.orog.nc").squeeze()
@@ -79,60 +86,74 @@ for idx,exp in enumerate(exp_list):
 
     # find the variable names
     orog_name = find_varname_from_unit(ds_orog, "m")
-    mask_name = find_varname_from_unit(ds_mask, "m")
-
-    # use land colors only from colormap
-    cmap_topo = split_cmap(cmocean.cm.topo, 0.5, 1.0)
+    mask_name = find_varname_from_keywords(ds_mask, ["land sea mask", "land/sea mask"])
 
     ds_orog = ds_orog.where(ds_mask[mask_name] >= 0.5, np.nan)  # Filter out bad values
 
-    # map plot with cartopy
-    p = ds_orog[orog_name].plot.pcolormesh(
-        ax=axes[idx], 
-        transform=ccrs.PlateCarree(),
-        # vmin=-1, vmax=2500, 
-        levels = (0, 250, 500,750,1000,1250,1500,1750, 2000,2250,2500),
-        cmap=cmap_orog,
-        add_colorbar=False)
+    data.append((ds_orog, ds_mask, orog_name, mask_name))
+
+# Plot the data
+fig, axes = plt.subplots(1, 3, figsize=(12, 5), subplot_kw={'projection': ccrs.Robinson()})
+fig.suptitle('Aptian Model Paleogeographies', fontsize=16, fontweight='bold', y = 0.7)
+
+# use land colors only from colormap
+cmap_topo = split_cmap(cmocean.cm.topo, 0.5, 1.0)
+
+for idx, (ds_orog, ds_mask, orog_name, mask_name) in enumerate(data):
+    # use land colors only from colormap
+    cmap_topo = split_cmap(cmocean.cm.topo, 0.5, 1.0)
+
+    # global map plot with cartopy
+    p = plot_filled_map(
+        ax=axes[idx],
+        data=ds_orog[orog_name],
+        type='pcolormesh',
+        cmap=cmap_topo, 
+        levels=orog_levels,
+        right_labels=True,
+        title=exp_labels[idx])
     
-# add colorbar
-fig.colorbar(p, ax=axes.ravel().tolist(), orientation='horizontal', pad=0.05)
+    # add coastlines
+    plot_contours(ax=axes[idx], data=ds_mask[mask_name], levels=[0.5], colors=['black'], linewidths=[1])
+    
+# add common colorbar
+cbar = fig.colorbar(p, ax=axes.ravel().tolist(), orientation='horizontal', pad=0.08, aspect=40, shrink = 0.6, extend='max')
+cbar.set_label('Model elevation (m)', fontsize=14)  
+cbar.ax.tick_params(labelsize=12)
 
-
+#### save figure
+if save_figures:
+     plt.savefig(fig_dir + '/global_aptian_geographies.pdf', bbox_inches='tight')  
+     
 plt.show()
 
 
 # %%
+# plot regional comparison of paleogeographies
+fig, axes = plt.subplots(1, 3, figsize=(12, 5), subplot_kw={'projection': ccrs.PlateCarree()})
+fig.suptitle('Aptian Model Paleogeographies', fontsize=16, fontweight='bold', y = 0.82)
 
-# %%
-
-# %%
-
-# %% [markdown]
-# #### appendix: some code snippets I regularly use
-
-# %% colab={"base_uri": "https://localhost:8080/", "height": 713} id="055047f3" outputId="8b79a52d-0d53-4631-91b9-e4fb17cfc984"
-#### loop analysis over data sets   
-# for expCount, exp in enumerate(exp_list):
-
-#### load netcdf data set
-# ds = xr.open_dataset(work_dir + '/data/file_name.nc')
-
-#### new multi-panel figure
-# fig, axes = plt.subplots(nrows, ncols, constrained_layout=True, figsize=(width, height) ) # figsize in inches
-
-#### map plot with cartopy
-# ax = fig.add_subplot(nrows, ncols, index, projection=ccrs.Robinson()) # or e.g. ccrs.PlateCarree()
-# ax.set_extent([minlon,maxlon, minlat,maxlat], ccrs.PlateCarree()) # or ax.set_global()
-# ax.coastlines()
-# ax.contourf(ds['variable_name'], transform=ccrs.PlateCarree(), levels=21, 
-#             vmin=..., vmax=..., cmap=cmocean.cm.topo, add_colorbar=False)
-
-#### add cyclic longitude to field and coordinate (from cartopy.util import add_cyclic_point)
-# variable_cyclic, longitude_cyclic = add_cyclic_point(variable, coord=longitude)
+for idx, (ds_orog, ds_mask, orog_name, mask_name) in enumerate(data):
+    # global map plot with cartopy
+    p = plot_filled_map(
+        ax=axes[idx],
+        data=ds_orog[orog_name],
+        type='pcolormesh',
+        cmap=cmap_topo, 
+        levels=orog_levels,
+        extent=[50, 160, 0, 85],
+        title=exp_labels[idx])
+    
+    # add coastlines
+    plot_contours(ax=axes[idx], data=ds_mask[mask_name], levels=[0.5], colors=['black'], linewidths=[3])
+    
+# add common colorbar
+cbar = fig.colorbar(p, ax=axes.ravel().tolist(), orientation='horizontal', pad=0.08, aspect=40, shrink = 0.6, extend='max')
+cbar.set_label('Model elevation (m)', fontsize=14)  
+cbar.ax.tick_params(labelsize=12)
 
 #### save figure
-# if save_figures:
-#      plt.savefig(work_dir + '/figures/figure_name.pdf')  
-#      plt.savefig(work_dir + '/figures/figure_name.png', dpi=200)  
-
+if save_figures:
+     plt.savefig(fig_dir + '/regional_aptian_geographies.pdf', bbox_inches='tight')  
+     
+plt.show()
