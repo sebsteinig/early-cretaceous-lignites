@@ -1,14 +1,26 @@
-# boilerplate python notebook template
-This repo should contain all documentation, scripts and data to recreate the final figure/analysis from the source data. Final analysis and plotting is done in jupyter notebooks with a python kernel for interactive analysis of the source or preprocessed data and inline documentation. 
+# Early Cretaceous land temperatures in Mongolia
+This repo should contain all documentation, scripts and data to recreate the model-data comparison of Early Cretaceous land temperatures in Mongolia.
 
 ## purpose
-What do I want to do?
+Comapre new lignite-based land surface temperature reconstructions (brGDGT) with a suite of available model simulations to see whether absolute temperatures are in broad agreement with existing model results. Simulation differences include different models, paleogeographies and CO2 levels.
 
 ## source data
-Some external, static data that builds the starting point of the analysis (e.g model output, CMIP archive, OPeNDAP server, ...) 
+- `data/raw/proxy_temps_and_locations.csv`: CSV file of annual mean air temperature reconstructions at two sites
+- `data/raw/model_clims`: gridded monthly mean climatologies of global simulation output + orography and land-sea-mask boundary conditions (netCDF)
 
-## preprocessing
-Large source data should be preprocessed before importing into the jupyter notebook (e.g., regridding, averaging, ...) to speed up interactive analysis and to allow distribution via github (100 MB file size limit). Put the preprocessing script into this repo and describe what you have done with the source data
+## models considered
+The following models were analysed to assess the modelled range in temperatures for different models, CO2 levels, paleogeographies and model physics: 
+
+| model ID | model    | CO2 (ppm) | geography     | physics                    |
+| -------- | -------- | --------- | ------------- | -------------------------- |
+| KCM_600  | KCM      | 600       | Müller/Blakey | ECHAM5 default             |
+| KCM_1200 | KCM      | 1200      | Müller/Blakey | ECHAM5 default             |
+| teuyO    | HadCM3BL | 560       | Getech        | Valdes et al. (2017)       |
+| teuyo    | HadCM3BL | 1120      | Getech        | Valdes et al. (2017)       |
+| texzx1   | HadCM3BL | 560       | Scotese       | Valdes et al. (2017)       |
+| texpx2   | HadCM3BL | 1103      | Scotese       | Valdes et al. (2017)       |
+| tfksx    | HadCM3BL | 780       | Scotese       | new (improved polar. amp.) |
+| tfkex    | HadCM3BL | 1103      | Scotese       | new (improved polar. amp.) |
 
 ## running the notebooks
 Easiest way to run locally is to first download the repo with
