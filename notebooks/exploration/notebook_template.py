@@ -1,25 +1,28 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py:light
+#     custom_cell_magics: kql
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.16.1
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.11.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
 
+# %% [markdown]
 # # Title
 # short description of what the notebook does
 
+# %% [markdown]
 # ## User input
 # define variables/lists to quickly change inputs to the notebook
 
-# +
+# %%
 work_dir       = '.' # location of cloned repository
 data_dir       = work_dir + '/data' # location of data files
 fig_dir        = work_dir + '/figures' # location of figure files
@@ -27,11 +30,11 @@ fig_dir        = work_dir + '/figures' # location of figure files
 exp_list       = ['exp1', 'exp2'] # list of data sets to loop over
 
 save_figures   = True # flag whether to save figures to disk or not
-# -
 
+# %% [markdown]
 # ## Load packages
 
-# + colab={"base_uri": "https://localhost:8080/"} id="WcMt0hmK_38Q" outputId="1ca62e3a-a818-48f8-aea4-d2827f558cdb"
+# %% colab={"base_uri": "https://localhost:8080/"} id="WcMt0hmK_38Q" outputId="1ca62e3a-a818-48f8-aea4-d2827f558cdb"
 ### some standard packages
 import matplotlib.pyplot as plt
 import numpy as np
@@ -50,20 +53,19 @@ import xarray as xr
 #### csv parser
 #import csv
 
-
-# -
-
+# %% [markdown]
 # ## Main code
 
+# %%
 
+# %%
 
+# %%
 
-
-
-
+# %% [markdown]
 # #### appendix: some code snippets I regularly use
 
-# + colab={"base_uri": "https://localhost:8080/", "height": 713} id="055047f3" outputId="8b79a52d-0d53-4631-91b9-e4fb17cfc984"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 713} id="055047f3" outputId="8b79a52d-0d53-4631-91b9-e4fb17cfc984"
 #### loop analysis over data sets   
 # for expCount, exp in enumerate(exp_list):
 
