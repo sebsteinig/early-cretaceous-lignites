@@ -1,0 +1,13 @@
+channels:
+  - conda-forge
+dependencies:
+  - python==3.10
+  - pip
+  - conda
+  - cartopy=0.23.0
+  - cmocean
+  - numpy
+  - xarray
+  - jupyterlab
+  - pandas
+  - jupytext
