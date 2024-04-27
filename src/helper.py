@@ -1,4 +1,4 @@
-def find_varname_from_unit(ds, unit):
+def find_varname_from_attribute(ds, attribute, pattern):
     """
     Find the variable name in a xarray dataset that has a specific unit.
 
@@ -16,7 +16,7 @@ def find_varname_from_unit(ds, unit):
     """
     var_name = None
     for var_name, var_data in ds.variables.items():
-        if var_data.attrs.get('units') == unit:
+        if var_data.attrs.get(attribute) == pattern:
             return var_name
     return var_name
 
@@ -39,8 +39,12 @@ def find_varname_from_keywords(ds, keywords):
     for var_name, var_data in ds.variables.items():
         # Retrieve the long name attribute of the variable
         long_name = var_data.attrs.get('long_name', '').lower()
-        
-        # Check if all keywords are present in the long name
+        standard_name = var_data.attrs.get('standard_name', '').lower()
+
+        # Check if any keyword is present in the standard name
+        if any(keyword.lower() in standard_name for keyword in keywords):
+            return var_name
+        # Check if any keyword is present in the long name
         if any(keyword.lower() in long_name for keyword in keywords):
             return var_name
 

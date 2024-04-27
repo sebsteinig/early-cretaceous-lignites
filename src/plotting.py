@@ -50,6 +50,7 @@ def plot_filled_map(ax, data, type="contourf", cmap="viridis", levels=None, exte
             transform=ccrs.PlateCarree(),
             cmap=cmap,
             levels=levels,
+            extend='both',
             **kwargs
         )
     elif type == "pcolormesh":

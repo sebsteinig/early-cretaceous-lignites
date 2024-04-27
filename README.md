@@ -16,7 +16,7 @@ The following models were analysed to assess the modelled range in temperatures 
 | KCM_600  | KCM      | 600       | Müller/Blakey | ECHAM5 default             |
 | KCM_1200 | KCM      | 1200      | Müller/Blakey | ECHAM5 default             |
 | teuyO    | HadCM3BL | 560       | Getech        | Valdes et al. (2017)       |
-| teuyo    | HadCM3BL | 1120      | Getech        | Valdes et al. (2017)       |
+| teuyo1   | HadCM3BL | 1120      | Getech        | Valdes et al. (2017)       |
 | texzx1   | HadCM3BL | 560       | Scotese       | Valdes et al. (2017)       |
 | texpx2   | HadCM3BL | 1103      | Scotese       | Valdes et al. (2017)       |
 | tfksx    | HadCM3BL | 780       | Scotese       | new (improved polar. amp.) |
