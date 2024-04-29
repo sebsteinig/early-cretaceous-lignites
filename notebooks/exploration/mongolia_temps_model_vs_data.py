@@ -8,7 +8,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.2
+#       jupytext_version: 1.16.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -418,8 +418,8 @@ fig.suptitle('Aptian Precipitation Anomalies', fontsize=16, fontweight='bold', y
 row = 0
 column = 0
 for idx, (ds_pr, ds_mask, pr_name, mask_name) in enumerate(data_pr):
-    # if idx == 6:
-    #     continue
+    if idx == 6:
+        continue
     if exp_list[idx] in ['KCM_600','tfksx','teuyO']:
         ds_pr_ref, ds_mask_ref, pr_name_ref, mask_name_ref = data_pr[2]
         if exp_list[idx] == 'teuyO':
