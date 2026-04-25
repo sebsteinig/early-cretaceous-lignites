@@ -2,6 +2,7 @@
 
 import cartopy.crs as ccrs
 
+
 def add_proxy_location_markers(ax, exp, data_csv, size=10):
     """
     Add proxy locations as red circles to a set of axes.
@@ -14,12 +15,19 @@ def add_proxy_location_markers(ax, exp, data_csv, size=10):
         Dataframe containing the proxy locations.
     """
     if exp in ["KCM_600", "KCM_1200"]:
-        rotation = 'kcm'
+        rotation = "kcm"
     elif exp in ["texzx1", "texpx2", "tfkex", "tfksx"]:
-        rotation = 'scotese'
+        rotation = "scotese"
     elif exp in ["teuyO", "teuyo1"]:
-        rotation = 'getech'
-    plat = data_csv.loc[:, f'{rotation}_lat']
-    plon = data_csv.loc[:, f'{rotation}_lon']
+        rotation = "getech"
+    plat = data_csv.loc[0:2, f"{rotation}_lat"]
+    plon = data_csv.loc[0:2, f"{rotation}_lon"]
 
-    ax.plot(plon, plat, 'ro', markersize=size, markeredgecolor='black', transform=ccrs.PlateCarree())
+    ax.plot(
+        plon,
+        plat,
+        "ro",
+        markersize=size,
+        markeredgecolor="black",
+        transform=ccrs.PlateCarree(),
+    )
